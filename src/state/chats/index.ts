@@ -101,7 +101,7 @@ export const fetchHistoryChat = () => async (dispatch, getState) => {
 
 export const setLastMessageAsync = (mess) => async (dispatch, getState) => {
   const { chat } = getState();
-  const chatItem = chat.historyChat.find((c) => c._id === mess._id);
+  const chatItem = chat.historyChat.find((c) => c._id === mess.room);
   if (chatItem) {
     dispatch(setLastMessage(mess));
   } else {
