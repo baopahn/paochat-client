@@ -1,8 +1,21 @@
 import { BASE_URL_API } from "config";
 import { io } from "socket.io-client";
 import { dispatch } from "state";
-import { appendMess, setLastMessageAsync, setTyping } from "state/chats";
-import { RECEIVE_MESS, RECEIVE_TYPING, SEND_MESS, SEND_TYPING } from "./events";
+import {
+  appendMess,
+  setLastMessageAsync,
+  setTyping,
+  updateStatusReadMess,
+  updateStatusSendMess,
+} from "state/chats";
+import {
+  SEND_READ_ALL_MESS,
+  RECEIVE_MESS,
+  RECEIVE_TYPING,
+  SEND_MESS,
+  SEND_TYPING,
+  RECEIVE_READ_ALL_MESS,
+} from "./events";
 
 const getChatContainer = () => document.querySelector("#chat-container");
 
@@ -19,7 +32,11 @@ const SocketClient = class {
     this.socket.on("authenticated", () => {});
 
     this.socket.on(RECEIVE_MESS, (mess) => {
-      dispatch(appendMess(mess));
+      if (mess.isSender) {
+        dispatch(updateStatusSendMess(mess));
+      } else {
+        dispatch(appendMess(mess));
+      }
       dispatch(setLastMessageAsync(mess));
       const chatContainer = getChatContainer();
       if (chatContainer)
@@ -32,18 +49,26 @@ const SocketClient = class {
     this.socket.on(RECEIVE_TYPING, ({ room, status }) => {
       dispatch(setTyping({ room, status }));
     });
+
+    this.socket.on(RECEIVE_READ_ALL_MESS, ({ room }) => {
+      dispatch(updateStatusReadMess({ room }));
+    });
   }
 
   disconnect(): void {
     this.socket.disconnect();
   }
 
-  sendMess(room, receiver, message) {
-    this.socket.emit(SEND_MESS, { room, receiver, message });
+  sendMess(room, receiver, message, idLocal) {
+    this.socket.emit(SEND_MESS, { room, receiver, message, idLocal });
   }
 
   typing(room, receiver, status) {
     this.socket.emit(SEND_TYPING, { room, receiver, status });
+  }
+
+  readAllMess(room, receiver) {
+    this.socket.emit(SEND_READ_ALL_MESS, { room, receiver });
   }
 };
 

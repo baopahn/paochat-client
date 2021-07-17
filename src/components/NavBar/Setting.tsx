@@ -3,9 +3,8 @@ import Menu from "components/Menu/Menu";
 import MenuItem from "components/Menu/MenuItem";
 import { AuthContext } from "contexts/AuthProvider";
 import { ThemeContext } from "contexts/ThemeProvider";
-import React from "react";
-import { useContext } from "react";
-import { BiBell, BiChevronDown } from "react-icons/bi";
+import React, { useContext } from "react";
+import { BiChevronDown } from "react-icons/bi";
 import styled from "styled-components";
 
 const SettingWrap = styled.div`
@@ -59,14 +58,12 @@ const Setting = () => {
         <ProfileName>{userInfo.fullName}</ProfileName>
       </Profile>
 
-      <Menu label={<BiBell style={styleIcon} />}>HELLO</Menu>
       <Menu label={<BiChevronDown style={styleIcon} />}>
-        <MenuItem onClick={logout}>
-          <Text>Sign out</Text>
-        </MenuItem>
-
         <MenuItem onClick={toggleTheme}>
           <Text>{label}</Text>
+        </MenuItem>
+        <MenuItem onClick={logout}>
+          <Text>Sign out</Text>
         </MenuItem>
       </Menu>
     </SettingWrap>

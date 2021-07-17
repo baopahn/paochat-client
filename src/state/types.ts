@@ -2,7 +2,15 @@ import { UserInfo } from "contexts/types";
 import React from "react";
 
 export interface Message {
-  message: string[];
+  type: "text" | "image";
+  message: string | React.ReactNode;
+  read?: boolean;
+  sending?: boolean;
+  idLocal?: string;
+}
+
+export interface MessageBlock {
+  message: Message[];
   isSender: boolean;
   createdAt: string;
 }
@@ -20,7 +28,8 @@ export interface Chat {
   current: string;
   typing: boolean;
   friend: UserInfo;
-  listMess: Message[];
+  focus: boolean;
+  listMess: MessageBlock[];
 }
 
 export interface Profile {

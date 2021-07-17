@@ -1,10 +1,18 @@
 import Button from "components/Button/Button";
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback } from "react";
 import { BiSend } from "react-icons/bi";
 import { useRouteMatch } from "react-router-dom";
 import socket from "socket";
 import { useAppDispatch } from "state";
-import { fetchHistoryMess, setFriend, setHistoryMessage } from "state/chats";
+import {
+  fetchHistoryMess,
+  sendMess,
+  setFocus,
+  setFriend,
+  setHistoryMessage,
+  setTyping,
+} from "state/chats";
 import useChat from "state/hooks/useChat";
 import { setIsSearch } from "state/searchs";
 import styled from "styled-components";
@@ -57,10 +65,19 @@ const Chat = () => {
   const dispatch = useAppDispatch();
   const { params }: { params: { id: string } } = useRouteMatch();
   const { id } = params;
-  const { listMess, friend, current, typing } = useChat();
+  const { listMess, friend, typing } = useChat();
   const refChatContainer = useRef(null);
-
+  const refInputChat = useRef(null);
   const [mess, setMess] = useState<string>("");
+
+  const handleClickOutside = useCallback(
+    (event) => {
+      if (refInputChat && !refInputChat.current.contains(event.target)) {
+        dispatch(setFocus(false));
+      }
+    },
+    [refInputChat, dispatch]
+  );
 
   useEffect(() => {
     dispatch(fetchHistoryMess(id));
@@ -69,15 +86,48 @@ const Chat = () => {
     return () => {
       dispatch(setHistoryMessage([]));
       dispatch(setFriend(null));
+      dispatch(setTyping({ room: id, status: false }));
     };
   }, [id, dispatch]);
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [handleClickOutside]);
+
+  useEffect(() => {
+    if (!friend) return;
+    socket.typing(id, friend._id, !!mess);
+  }, [mess, friend, id]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setMess("");
+    dispatch(sendMess(mess));
+  };
+
+  const renderTyping = useMemo(() => {
+    return typing && friend ? (
+      <Message
+        key={`mess-typing`}
+        avatar={friend.avatar}
+        listMess={[{ type: "text", message: <TypingMess /> }]}
+        isSender={false}
+      />
+    ) : (
+      <></>
+    );
+  }, [friend, typing]);
 
   const renderMess = useMemo(() => {
     return listMess.map((mess, index) => {
       if (!friend) return <></>;
-
       return (
         <Message
+          isLatestSender={index <= 1 && mess.isSender === true}
           key={`mess-${index}`}
           avatar={friend.avatar}
           listMess={mess.message}
@@ -86,35 +136,6 @@ const Chat = () => {
       );
     });
   }, [listMess, friend]);
-
-  const renderTyping = useMemo(() => {
-    return typing && friend ? (
-      <Message
-        key={`mess-typing`}
-        avatar={friend.avatar}
-        listMess={[<TypingMess />]}
-        isSender={false}
-      />
-    ) : (
-      <></>
-    );
-  }, [friend, typing]);
-
-  useEffect(() => {
-    if (!friend) return;
-
-    if (mess) {
-      socket.typing(id, friend._id, true);
-    } else {
-      socket.typing(id, friend._id, false);
-    }
-  }, [mess, friend, id]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    socket.sendMess(current, friend._id, mess);
-    setMess("");
-  };
 
   return (
     <ChatWrap>
@@ -125,6 +146,8 @@ const Chat = () => {
       </ChatContainer>
       <ChatType onSubmit={handleSubmit}>
         <ChatInput
+          onFocus={() => dispatch(setFocus(true))}
+          ref={refInputChat}
           value={mess}
           placeholder="Aa"
           onChange={({ target }) => setMess(target.value)}
