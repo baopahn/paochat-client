@@ -1,5 +1,5 @@
 import { IconButton } from "components/Button/Button";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 const MenuWrap = styled.div`
@@ -30,11 +30,28 @@ interface MenuProps {
 
 const Menu: React.FC<MenuProps> = ({ label, children }) => {
   const [isShow, setIsShow] = useState<boolean>(false);
-
+  const refIcon = useRef(null);
   const handleClick = () => setIsShow((prev) => !prev);
 
+  const handleClickOutside = useCallback(
+    (event) => {
+      if (refIcon && !refIcon.current.contains(event.target)) {
+        setIsShow(false);
+      }
+    },
+    [refIcon]
+  );
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [handleClickOutside]);
+
   return (
-    <MenuWrap>
+    <MenuWrap ref={refIcon}>
       <IconButton onClick={handleClick}>{label}</IconButton>
       <MenuContainer isShow={isShow}>{children}</MenuContainer>
     </MenuWrap>

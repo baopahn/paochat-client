@@ -2,3 +2,5 @@ export const SEND_MESS = "SEND_MESS";
 export const RECEIVE_MESS = "RECEIVE_MESS";
 export const SEND_TYPING = "SEND_TYPING";
 export const RECEIVE_TYPING = "RECEIVE_TYPING";
+export const SEND_READ_ALL_MESS = "SEND_READ_ALL_MESS";
+export const RECEIVE_READ_ALL_MESS = "RECEIVE_READ_ALL_MESS";

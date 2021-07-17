@@ -1,12 +1,13 @@
 import { Img } from "components/Layout/ElementCustom";
 import React from "react";
+import { Message as MessageType } from "state/types";
 import styled from "styled-components";
+import { BiUpArrowAlt } from "react-icons/bi";
 
-const SmallAvatar = styled.div`
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  overflow: hidden;
+const Block = styled.div`
+  display: flex;
+  flex-direction: column-reverse;
+  margin: 10px 5px;
 `;
 
 const Avatar = styled.div`
@@ -16,103 +17,175 @@ const Avatar = styled.div`
   overflow: hidden;
 `;
 
-const MessContainer = styled.div`
+const SmallAvatar = styled.div`
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  overflow: hidden;
+`;
+
+const SmallSending = styled.div`
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid
+    ${({ theme }) =>
+      theme.isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.3)"};
+`;
+
+const SmallSendSuccess = styled.div`
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: ${({ theme }) =>
+    theme.isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.3)"};
   display: flex;
-  align-items: flex-end;
-  margin: 5px 0;
-  padding: 12px 5px;
+  justify-content: center;
+  align-items: center;
+
+  & > svg {
+    width: 12px;
+    height: 12px;
+    fill: #fff;
+  }
 `;
 
-const MyMessContainer = styled(MessContainer)`
-  flex-direction: row-reverse;
-  justify-content: flex-end;
-`;
-
-const FriendMessContainer = styled(MessContainer)`
-  flex-direction: row;
-  justify-content: flex-start;
-`;
-
-const MessWrap = styled.div`
+const MessContentText = styled.div`
   flex: 1;
-  display: flex;
-  flex-direction: column-reverse;
-`;
-
-const MyMessWrap = styled(MessWrap)`
-  padding-right: 10px;
-  align-items: flex-end;
-`;
-
-const FriendMessWrap = styled(MessWrap)`
-  padding-left: 10px;
-  align-items: flex-start;
-`;
-
-const Mess = styled.div`
-  max-width: 60%;
+  border-radius: 18px;
   padding: 8px 12px;
-  margin: 1.5px 0;
-  word-break: break-word;
   background-color: ${({ theme }) => theme.secondary};
 `;
 
-const MyMess = styled(Mess)`
-  border-radius: 18px 4px 4px 18px;
+const FriendMessContentText = styled(MessContentText)`
+  margin-left: 6px;
+`;
 
-  &:first-child {
+const MyMessContentText = styled(MessContentText)`
+  margin-right: 6px;
+`;
+
+const BlockMyMess = styled(Block)`
+  align-items: flex-end;
+`;
+
+const BlockFriendMess = styled(Block)`
+  align-items: flex-start;
+`;
+
+const MessItem = styled.div`
+  display: flex;
+  margin: 1px 0;
+  align-items: flex-end;
+`;
+
+const MyMess = styled(MessItem)`
+  flex-direction: row-reverse;
+  & > ${MyMessContentText} {
+    border-radius: 18px 4px 4px 18px;
+  }
+
+  &:first-child > ${MyMessContentText} {
     border-radius: 18px 4px 18px 18px;
   }
 
-  &:last-child {
+  &:last-child > ${MyMessContentText} {
     border-radius: 18px 18px 4px 18px;
   }
 `;
 
-const FriendMess = styled(Mess)`
-  border-radius: 4px 18px 18px 4px;
+const FriendMess = styled(MessItem)`
+  flex-direction: row;
 
-  &:first-child {
+  & > ${FriendMessContentText} {
+    border-radius: 4px 18px 18px 4px;
+  }
+
+  &:first-child > ${FriendMessContentText} {
     border-radius: 4px 18px 18px 18px;
   }
 
-  &:last-child {
+  &:last-child > ${FriendMessContentText} {
     border-radius: 18px 18px 18px 4px;
+  }
+
+  & > ${Avatar} {
+    & > img {
+      display: none;
+    }
+  }
+
+  &:first-child > ${Avatar} {
+    & > img {
+      display: block;
+    }
   }
 `;
 
 interface MessageProps {
+  isLatestSender?: boolean;
   isSender: boolean;
   avatar: string;
-  listMess: Array<string | React.ReactNode>;
+  listMess: MessageType[];
 }
 
-const Message: React.FC<MessageProps> = ({ isSender, avatar, listMess }) => {
-  const render = isSender ? (
-    <MyMessContainer>
-      <SmallAvatar>
-        <Img src={avatar} />
-      </SmallAvatar>
-      <MyMessWrap>
-        {listMess.map((m, index) => (
-          <MyMess key={`mymess-${index}`}>{m}</MyMess>
-        ))}
-      </MyMessWrap>
-    </MyMessContainer>
-  ) : (
-    <FriendMessContainer>
-      <Avatar>
-        <Img src={avatar} />
-      </Avatar>
-      <FriendMessWrap>
-        {listMess.map((m, index) => (
-          <FriendMess key={`friendmess-${index}`}>{m}</FriendMess>
-        ))}
-      </FriendMessWrap>
-    </FriendMessContainer>
-  );
+const Message: React.FC<MessageProps> = ({
+  isLatestSender = false,
+  isSender,
+  avatar,
+  listMess,
+}) => {
+  const isSingleMess = listMess.length === 1;
+  const borderRadius = { borderRadius: isSingleMess ? "18px" : "" };
+  const latestIndexRead = listMess.findIndex((mess) => mess.read === true);
 
-  return render;
+  const [lastSeen, seen, send, unsend] = [
+    <SmallAvatar>
+      <Img src={avatar} />
+    </SmallAvatar>,
+    <SmallAvatar />,
+    <SmallSendSuccess>
+      <BiUpArrowAlt />
+    </SmallSendSuccess>,
+    <SmallSending />,
+  ];
+
+  const renderStatusMyMess = (index, read, sending) => {
+    if (!isLatestSender) return seen;
+    if (latestIndexRead === index) return lastSeen;
+    if (read) return seen;
+    if (sending) return unsend;
+    return send;
+  };
+
+  const renderMess = isSender ? (
+    <BlockMyMess>
+      {listMess.map((mess, index) => (
+        <MyMess key={`mymess-${index}`}>
+          {renderStatusMyMess(index, mess.read, mess.sending)}
+          <MyMessContentText style={{ ...borderRadius }}>
+            {mess.message}
+          </MyMessContentText>
+        </MyMess>
+      ))}
+    </BlockMyMess>
+  ) : (
+    <BlockFriendMess>
+      {listMess.map((mess, index) => (
+        <FriendMess key={`friendmess-${index}`}>
+          <Avatar>
+            <Img src={avatar} />
+          </Avatar>
+          <FriendMessContentText style={{ ...borderRadius }}>
+            {mess.message}
+          </FriendMessContentText>
+        </FriendMess>
+      ))}
+    </BlockFriendMess>
+  );
+  return renderMess;
 };
 
 export default Message;
