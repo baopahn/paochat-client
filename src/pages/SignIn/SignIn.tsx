@@ -1,4 +1,5 @@
 import { Text } from "components/Layout/ElementCustom";
+import Logo from "components/Logo";
 import { AuthContext } from "contexts/AuthProvider";
 import React, { useContext } from "react";
 import { Redirect, useHistory } from "react-router-dom";
@@ -9,23 +10,30 @@ const SignInWrap = styled.div`
   width: 100%;
   height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: ${({ theme }) => theme.background};
 `;
 
 const SignInContainer = styled.div`
-  width: 400px;
+  min-width: 400px;
   padding: 30px;
   border-radius: 10px;
   border: 1px solid ${({ theme }) => theme.border};
   box-shadow: 0 0 30px ${({ theme }) => theme.border};
 `;
 
-const Label = styled(Text)`
-  font-size: 30px;
-  font-weight: 600;
-  margin-bottom: 20px;
+const Head = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 50px;
+`;
+
+const LogoWrap = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const SignIn = () => {
@@ -40,7 +48,16 @@ const SignIn = () => {
   const handleRender = !token ? (
     <SignInWrap>
       <SignInContainer>
-        <Label>Sign in</Label>
+        <Head>
+          <LogoWrap>
+            <Logo width={25} height={25} />
+            <Text style={{ marginLeft: 10, fontSize: 25, fontWeight: 600 }}>
+              PaoChat
+            </Text>
+          </LogoWrap>
+
+          <Text style={{ fontSize: 20 }}>Sign in</Text>
+        </Head>
         <GoogleLoginCustom onSuccess={handleSuccess} />
       </SignInContainer>
     </SignInWrap>

@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import Setting from "./Setting";
 import { Link } from "react-router-dom";
+import Logo from "components/Logo";
+import { Text } from "components/Layout/ElementCustom";
 
 const NavbarWrap = styled.div`
   height: inherit;
@@ -13,7 +15,7 @@ const NavbarWrap = styled.div`
   padding: 0 20px;
 `;
 
-const Logo = styled.div`
+const LogoWrap = styled.div`
   height: 42px;
   width: 150px;
   border-radius: 10px;
@@ -22,7 +24,6 @@ const Logo = styled.div`
   align-items: center;
   font-size: 25px;
   font-weight: 800;
-  color: white;
   background-color: ${({ theme }) => theme.primary};
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
@@ -35,7 +36,10 @@ const NavBar = () => {
   return (
     <NavbarWrap>
       <Link to="/">
-        <Logo>PaoChat</Logo>
+        <LogoWrap>
+          <Logo width={20} height={20} />
+          <Text style={{ marginLeft: 8, color: "#fff" }}>PaoChat</Text>
+        </LogoWrap>
       </Link>
       <SettingWrap>
         <Setting />

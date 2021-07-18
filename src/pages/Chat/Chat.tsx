@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { BiSend } from "react-icons/bi";
+import { BiSend, BiImage } from "react-icons/bi";
 import { useRouteMatch } from "react-router-dom";
 import socket from "socket";
 import { useAppDispatch } from "state";
@@ -40,7 +40,7 @@ const ChatContainer = styled.div`
 
 const ChatType = styled.form`
   height: 60px;
-  box-shadow: 0 -2px 5px ${({ theme }) => theme.border};
+  box-shadow: 0 -1px 4px ${({ theme }) => theme.border};
   display: flex;
   align-items: center;
   padding: 0 20px;
@@ -179,6 +179,10 @@ const Chat = () => {
         />
         <SendButton>
           <BiSend size="25px" style={{ fill: "inherit" }} />
+        </SendButton>
+
+        <SendButton type="button">
+          <BiImage size="25px" style={{ fill: "inherit" }} />
         </SendButton>
       </ChatType>
     </ChatWrap>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ThemeProvider as SCThemeProvider } from "styled-components";
 import dark from "theme/dark";
 import light from "theme/light";

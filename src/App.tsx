@@ -7,11 +7,10 @@ import React, { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "contexts/AuthProvider";
+import PageLoader from "components/PageLoader";
 
 const Home = lazy(() => import("pages/Home"));
 const SignIn = lazy(() => import("pages/SignIn"));
-
-const PageLoader = () => <Text>Loading...</Text>;
 
 const App: React.FC = () => {
   const { userInfo } = useContext(AuthContext);
