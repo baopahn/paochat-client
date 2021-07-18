@@ -24,6 +24,7 @@ export interface HistoryChat {
 }
 
 export interface Chat {
+  page: number;
   historyChat: HistoryChat[];
   current: string;
   typing: boolean;

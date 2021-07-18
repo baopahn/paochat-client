@@ -11,6 +11,7 @@ const sortCB = (c1, c2) => {
 };
 
 const initialState: Chat = {
+  page: 0,
   current: "",
   typing: false,
   listMess: [],
@@ -40,7 +41,7 @@ export const chatSlice = createSlice({
     appendMess: (state, action) => {
       const mess = action.payload;
       if (mess.room !== state.current) return;
-      if (state.focus) {
+      if (state.focus && state.friend) {
         socket.readAllMess(state.current, state.friend._id);
       }
 
@@ -51,6 +52,21 @@ export const chatSlice = createSlice({
         listMess[0].message.unshift(mess.message);
         listMess[0].createdAt = mess.createdAt;
       }
+    },
+
+    appendListMess: (state, action) => {
+      const { listMess } = state;
+      const newListMess = action.payload;
+      if (listMess.length > 0) {
+        const messEnd = listMess[listMess.length - 1];
+        if (messEnd.isSender === newListMess[0].isSender) {
+          messEnd.message = messEnd.message.concat(newListMess[0].message);
+          newListMess.splice(0, 1);
+        }
+      }
+
+      state.listMess = state.listMess.concat(newListMess);
+      state.page = state.page + 1;
     },
 
     updateStatusSendMess: (state, action) => {
@@ -98,7 +114,7 @@ export const chatSlice = createSlice({
     setFocus: (state, action) => {
       state.focus = action.payload;
 
-      if (action.payload) {
+      if (action.payload && state.friend) {
         socket.readAllMess(state.current, state.friend._id);
       }
     },
@@ -112,6 +128,13 @@ export const chatSlice = createSlice({
       if (!block) return;
 
       block.message.forEach((m) => (m.read = true));
+    },
+    resetMess: (state) => {
+      state.listMess = [];
+      state.focus = false;
+      state.friend = null;
+      state.page = 0;
+      state.typing = false;
     },
   },
 });
@@ -128,6 +151,8 @@ export const {
   setLastMessage,
   setFocus,
   updateStatusReadMess,
+  appendListMess,
+  resetMess,
 } = chatSlice.actions;
 
 export const fetchHistoryMess = (id) => async (dispatch, getState) => {
@@ -135,6 +160,21 @@ export const fetchHistoryMess = (id) => async (dispatch, getState) => {
   const { listMess, friend } = await getHistoryMessage(id);
   dispatch(setFriend(friend));
   dispatch(setHistoryMessage(listMess));
+};
+
+export const fetchMoreHistoryMess = () => async (dispatch, getState) => {
+  const { chat } = getState();
+  console.log(chat.page);
+
+  if (!chat.current) return;
+  const { listMess, friend } = await getHistoryMessage(
+    chat.current,
+    chat.page + 1
+  );
+
+  if (listMess.length > 0) {
+    dispatch(appendListMess(listMess));
+  }
 };
 
 export const fetchHistoryChat = () => async (dispatch, getState) => {
