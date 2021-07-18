@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ThemeProvider as SCThemeProvider } from "styled-components";
 import dark from "theme/dark";
 import light from "theme/light";
@@ -13,7 +13,10 @@ const ThemeContext = React.createContext({
 const ThemeContextProvider: React.FC = ({ children }) => {
   const [isDark, setIsDark] = useState<boolean>(() => {
     const isDarkUserSetting = localStorage.getItem(CACHE_KEY);
-    return isDarkUserSetting ? JSON.parse(isDarkUserSetting) : false;
+
+    return isDarkUserSetting
+      ? JSON.parse(isDarkUserSetting)
+      : window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
 
   const toggleTheme = (): void => {
