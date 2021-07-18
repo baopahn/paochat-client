@@ -4,3 +4,5 @@ export interface UserInfo {
   fullName: string;
   avatar: string;
 }
+
+export type Hander = () => void;
