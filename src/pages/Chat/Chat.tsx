@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { BiSend, BiImage } from "react-icons/bi";
+import { BiImage, BiSend } from "react-icons/bi";
 import { useRouteMatch } from "react-router-dom";
 import socket from "socket";
 import { useAppDispatch } from "state";
@@ -149,6 +149,7 @@ const Chat = () => {
   const renderMess = useMemo(() => {
     return listMess.map((mess, index) => {
       if (!friend) return <></>;
+
       return (
         <Message
           isLatestSender={index <= 1 && mess.isSender === true}

@@ -10,6 +10,7 @@ export interface ThemeType {
   card: string;
   zIndexModal: number;
   overlay: string;
+  menu: string;
 }
 
 export default ThemeType;

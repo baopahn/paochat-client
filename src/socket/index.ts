@@ -8,13 +8,14 @@ import {
   updateStatusReadMess,
   updateStatusSendMess,
 } from "state/chats";
+import soundController from "utils/sound";
 import {
-  SEND_READ_ALL_MESS,
   RECEIVE_MESS,
+  RECEIVE_READ_ALL_MESS,
   RECEIVE_TYPING,
   SEND_MESS,
+  SEND_READ_ALL_MESS,
   SEND_TYPING,
-  RECEIVE_READ_ALL_MESS,
 } from "./events";
 
 const getChatContainer = () => document.querySelector("#chat-container");
@@ -34,8 +35,10 @@ const SocketClient = class {
     this.socket.on(RECEIVE_MESS, (mess) => {
       if (mess.isSender) {
         dispatch(updateStatusSendMess(mess));
+        soundController.playSound("sending");
       } else {
         dispatch(appendMess(mess));
+        soundController.playSound("sending");
       }
       dispatch(setLastMessageAsync(mess));
       const chatContainer = getChatContainer();
@@ -61,6 +64,7 @@ const SocketClient = class {
 
   sendMess(room, receiver, message, idLocal) {
     this.socket.emit(SEND_MESS, { room, receiver, message, idLocal });
+    soundController.playSound("sending");
   }
 
   typing(room, receiver, status) {

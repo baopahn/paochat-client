@@ -18,7 +18,7 @@ const MenuContainer = styled.div<{ isShow: boolean }>`
   border-radius: 10px;
   padding: 10px;
   box-shadow: 0 0 8px ${({ theme }) => theme.border};
-  background-color: ${({ theme }) => theme.background};
+  background-color: ${({ theme }) => theme.menu};
 
   display: ${({ isShow }) => (isShow ? "block" : "none")};
 `;

@@ -13,6 +13,7 @@ export const dark: ThemeType = {
   card: "#fff",
   zIndexModal: 10,
   overlay: "rgba(0,0,0,0.2)",
+  menu: "hsl(210,35%,12%)",
 };
 
 export default dark;

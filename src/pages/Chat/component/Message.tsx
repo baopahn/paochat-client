@@ -1,8 +1,8 @@
 import { Img } from "components/Layout/ElementCustom";
 import React from "react";
+import { BiUpArrowAlt } from "react-icons/bi";
 import { Message as MessageType } from "state/types";
 import styled from "styled-components";
-import { BiUpArrowAlt } from "react-icons/bi";
 
 const Block = styled.div`
   display: flex;
@@ -134,7 +134,7 @@ interface MessageProps {
   listMess: MessageType[];
 }
 
-const Message: React.FC<MessageProps> = ({
+const MessageBlock: React.FC<MessageProps> = ({
   isLatestSender = false,
   isSender,
   avatar,
@@ -191,4 +191,4 @@ const Message: React.FC<MessageProps> = ({
   return renderMess;
 };
 
-export default Message;
+export default MessageBlock;

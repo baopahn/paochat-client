@@ -1,13 +1,11 @@
-import GlobalStyle from "components/Global";
-import { Text } from "components/Layout/ElementCustom";
 import ControlPanel from "components/ControlPanel/ControlPanel";
-import ResetCSS from "components/ResetCSS";
-import PrivateRoute from "pages/PrivateRoute";
-import React, { lazy, Suspense } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { useContext } from "react";
-import { AuthContext } from "contexts/AuthProvider";
+import GlobalStyle from "components/Global";
 import PageLoader from "components/PageLoader";
+import ResetCSS from "components/ResetCSS";
+import { AuthContext } from "contexts/AuthProvider";
+import PrivateRoute from "pages/PrivateRoute";
+import React, { lazy, Suspense, useContext } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 const Home = lazy(() => import("pages/Home"));
 const SignIn = lazy(() => import("pages/SignIn"));

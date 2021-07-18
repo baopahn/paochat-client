@@ -16,6 +16,7 @@ export const light: ThemeType = {
   card: "#f8f8f8",
   zIndexModal: 10,
   overlay: "rgba(0,0,0,0.2)",
+  menu: "#fff",
 };
 
 export default light;
