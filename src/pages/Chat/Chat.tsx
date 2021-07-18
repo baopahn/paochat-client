@@ -1,17 +1,21 @@
 import Button from "components/Button/Button";
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useCallback } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { BiSend } from "react-icons/bi";
 import { useRouteMatch } from "react-router-dom";
 import socket from "socket";
 import { useAppDispatch } from "state";
 import {
   fetchHistoryMess,
+  fetchMoreHistoryMess,
+  resetMess,
   sendMess,
   setFocus,
-  setFriend,
-  setHistoryMessage,
-  setTyping,
 } from "state/chats";
 import useChat from "state/hooks/useChat";
 import { setIsSearch } from "state/searchs";
@@ -68,7 +72,9 @@ const Chat = () => {
   const { listMess, friend, typing } = useChat();
   const refChatContainer = useRef(null);
   const refInputChat = useRef(null);
+  const refLoadMore = useRef(null);
   const [mess, setMess] = useState<string>("");
+  const [observerIsSet, setObserverIsSet] = useState<boolean>(false);
 
   const handleClickOutside = useCallback(
     (event) => {
@@ -80,13 +86,11 @@ const Chat = () => {
   );
 
   useEffect(() => {
-    dispatch(fetchHistoryMess(id));
     dispatch(setIsSearch(false));
-
+    dispatch(fetchHistoryMess(id));
     return () => {
-      dispatch(setHistoryMessage([]));
-      dispatch(setFriend(null));
-      dispatch(setTyping({ room: id, status: false }));
+      dispatch(resetMess());
+      setObserverIsSet(false);
     };
   }, [id, dispatch]);
 
@@ -102,6 +106,26 @@ const Chat = () => {
     if (!friend) return;
     socket.typing(id, friend._id, !!mess);
   }, [mess, friend, id]);
+
+  const lengthMess = listMess.length;
+  useEffect(() => {
+    if (lengthMess <= 0) return;
+    if (observerIsSet) return;
+
+    const showMoreMess = (entries) => {
+      const [entry] = entries;
+      if (entry.isIntersecting) {
+        dispatch(fetchMoreHistoryMess());
+      }
+    };
+
+    const loadMoreObserver = new IntersectionObserver(showMoreMess, {
+      rootMargin: "0px",
+      threshold: 1,
+    });
+    loadMoreObserver.observe(refLoadMore.current);
+    setObserverIsSet(true);
+  }, [observerIsSet, id, dispatch, lengthMess]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -143,6 +167,7 @@ const Chat = () => {
       <ChatContainer id="chat-container" ref={refChatContainer}>
         {renderTyping}
         {renderMess}
+        {listMess.length > 0 && <div ref={refLoadMore}></div>}
       </ChatContainer>
       <ChatType onSubmit={handleSubmit}>
         <ChatInput
