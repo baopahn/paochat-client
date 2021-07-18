@@ -35,10 +35,10 @@ const SocketClient = class {
     this.socket.on(RECEIVE_MESS, (mess) => {
       if (mess.isSender) {
         dispatch(updateStatusSendMess(mess));
-        soundController.playSound("sending");
+        soundController.playSound("sendsuccess");
       } else {
         dispatch(appendMess(mess));
-        soundController.playSound("sending");
+        soundController.playSound("newmessage");
       }
       dispatch(setLastMessageAsync(mess));
       const chatContainer = getChatContainer();
