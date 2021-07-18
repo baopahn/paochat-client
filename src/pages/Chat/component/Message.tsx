@@ -57,6 +57,8 @@ const MessContentText = styled.div`
   border-radius: 18px;
   padding: 8px 12px;
   background-color: ${({ theme }) => theme.secondary};
+  color: #fff;
+  line-height: 1.3333;
 `;
 
 const FriendMessContentText = styled(MessContentText)`
@@ -77,8 +79,9 @@ const BlockFriendMess = styled(Block)`
 
 const MessItem = styled.div`
   display: flex;
-  margin: 1px 0;
+  margin: 1.1px 0;
   align-items: flex-end;
+  max-width: 65%;
 `;
 
 const MyMess = styled(MessItem)`

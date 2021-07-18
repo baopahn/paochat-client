@@ -10,8 +10,8 @@ const GlobalStyle = createGlobalStyle`
   /*========== Colors ==========*/
   /* Change favorite color - Blue 210 - Purple 250 - Green 142 - Pink 340*/
   :root{
-    --hue-light-color: 15;
-    --hue-dark-color: 15;
+    --hue-light-color: 258;
+    --hue-dark-color: 258;
   }
   
   * {

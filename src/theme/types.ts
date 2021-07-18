@@ -7,6 +7,9 @@ export interface ThemeType {
   button: string;
   border: string;
   icon: string;
+  card: string;
+  zIndexModal: number;
+  overlay: string;
 }
 
 export default ThemeType;
