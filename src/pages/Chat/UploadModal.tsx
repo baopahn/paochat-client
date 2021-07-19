@@ -30,7 +30,7 @@ const LabelFor = styled.label`
 const ModalWrap = styled.div`
   background-color: ${({ theme }) => theme.modal};
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 8px;
   z-index: ${({ theme }) => theme.zIndexModal};
   width: 300px;
   min-height: 250px;
