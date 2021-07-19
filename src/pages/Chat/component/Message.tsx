@@ -3,6 +3,7 @@ import React from "react";
 import { BiUpArrowAlt } from "react-icons/bi";
 import { Message as MessageType } from "state/types";
 import styled from "styled-components";
+import { checkUrl } from "utils/checkUrl";
 import { getLinkViewImage } from "utils/getLink";
 
 const Block = styled.div`
@@ -171,7 +172,21 @@ const MessageBlock: React.FC<MessageProps> = ({
   };
 
   const renderMessType = (message) => {
-    if (message.type === "text") return message.message;
+    if (message.type === "text") {
+      const isUrl = checkUrl(message.message);
+      return isUrl ? (
+        <a
+          href={message.message}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ textDecoration: "underline" }}
+        >
+          {message.message}
+        </a>
+      ) : (
+        message.message
+      );
+    }
     if (message.type === "image")
       return (
         <a
