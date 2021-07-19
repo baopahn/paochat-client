@@ -51,10 +51,6 @@ const ModalContainer = styled.div`
   border-width: 1px;
   overflow: hidden;
   border-radius: 5px;
-
-  img {
-    object-fit: contain;
-  }
 `;
 
 const ModalAction = styled.div`

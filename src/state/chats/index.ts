@@ -29,6 +29,7 @@ export const chatSlice = createSlice({
     },
     setHistoryMessage: (state, action) => {
       state.listMess = action.payload;
+      state.page = 1;
     },
     setFriend: (state, action) => {
       state.friend = action.payload;
@@ -164,8 +165,7 @@ export const fetchHistoryMess = (id) => async (dispatch, getState) => {
 
 export const fetchMoreHistoryMess = () => async (dispatch, getState) => {
   const { chat } = getState();
-
-  if (!chat.current) return;
+  if (!chat.current || chat.page < 1) return;
   const { listMess } = await getHistoryMessage(chat.current, chat.page + 1);
 
   if (listMess.length > 0) {

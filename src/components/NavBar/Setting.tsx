@@ -4,8 +4,10 @@ import MenuItem from "components/Menu/MenuItem";
 import { AuthContext } from "contexts/AuthProvider";
 import { ThemeContext } from "contexts/ThemeProvider";
 import React, { useContext } from "react";
+import { useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import styled from "styled-components";
+import soundController from "utils/sound";
 
 const SettingWrap = styled.div`
   display: flex;
@@ -47,7 +49,14 @@ const Setting = () => {
   };
 
   const { isDark, toggleTheme } = useContext(ThemeContext);
-  const label = isDark ? "Light mode" : "Dark mode";
+  const labelTheme = isDark ? "Light mode" : "Dark mode";
+
+  const [isMute, setIsMute] = useState(() => soundController.getIsMute());
+  const labelMute = isMute ? "Unmute" : "Mute";
+  const toggleMute = () => {
+    soundController.toggleMute();
+    setIsMute(!isMute);
+  };
 
   return (
     <SettingWrap>
@@ -60,7 +69,10 @@ const Setting = () => {
 
       <Menu label={<BiChevronDown style={styleIcon} />}>
         <MenuItem onClick={toggleTheme}>
-          <Text>{label}</Text>
+          <Text>{labelTheme}</Text>
+        </MenuItem>
+        <MenuItem onClick={toggleMute}>
+          <Text>{labelMute}</Text>
         </MenuItem>
         <MenuItem onClick={logout}>
           <Text>Sign out</Text>

@@ -30,7 +30,11 @@ class Sound {
     };
   }
 
-  public setMute(): void {
+  public getIsMute(): boolean {
+    return this._isMute;
+  }
+
+  public toggleMute(): void {
     this._isMute = !this._isMute;
     localStorage.setItem(this.CACHE_KEY, this._isMute.toString());
   }
