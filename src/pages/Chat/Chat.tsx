@@ -1,4 +1,5 @@
 import Button from "components/Button/Button";
+import { useModal } from "contexts/ModalProvider";
 import React, {
   useCallback,
   useEffect,
@@ -23,6 +24,7 @@ import styled from "styled-components";
 import Head from "./component/Head";
 import Message from "./component/Message";
 import TypingMess from "./component/TypingMess";
+import UploadModal from "./UploadModal";
 
 const ChatWrap = styled.div`
   margin-top: 2px;
@@ -75,6 +77,7 @@ const Chat = () => {
   const refLoadMore = useRef(null);
   const [mess, setMess] = useState<string>("");
   const [observerIsSet, setObserverIsSet] = useState<boolean>(false);
+  const [onClickUpload] = useModal(<UploadModal />);
 
   const handleClickOutside = useCallback(
     (event) => {
@@ -130,7 +133,7 @@ const Chat = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setMess("");
-    dispatch(sendMess(mess));
+    dispatch(sendMess({ message: mess, type: "text" }));
   };
 
   const renderTyping = useMemo(() => {
@@ -182,7 +185,7 @@ const Chat = () => {
           <BiSend size="25px" style={{ fill: "inherit" }} />
         </SendButton>
 
-        <SendButton type="button">
+        <SendButton type="button" onClick={onClickUpload}>
           <BiImage size="25px" style={{ fill: "inherit" }} />
         </SendButton>
       </ChatType>

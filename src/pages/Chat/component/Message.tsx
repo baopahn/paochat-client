@@ -127,6 +127,12 @@ const FriendMess = styled(MessItem)`
   }
 `;
 
+const ImgCustom = styled(Img)`
+  object-fit: contain;
+  border-radius: 5px;
+  max-width: 300px;
+`;
+
 interface MessageProps {
   isLatestSender?: boolean;
   isSender: boolean;
@@ -163,13 +169,25 @@ const MessageBlock: React.FC<MessageProps> = ({
     return send;
   };
 
+  const renderMessType = (message) => {
+    if (message.type === "text") return message.message;
+    if (message.type === "image") return <ImgCustom src={message.message} />;
+  };
+
   const renderMess = isSender ? (
     <BlockMyMess>
       {listMess.map((mess, index) => (
         <MyMess key={`mymess-${index}`}>
           {renderStatusMyMess(index, mess.read, mess.sending)}
-          <MyMessContentText style={{ ...borderRadius }}>
-            {mess.message}
+
+          <MyMessContentText
+            style={{
+              ...borderRadius,
+              backgroundColor: mess.type === "image" ? "unset" : "",
+              padding: mess.type === "image" ? "8px 0 0" : "",
+            }}
+          >
+            {renderMessType(mess)}
           </MyMessContentText>
         </MyMess>
       ))}
@@ -181,8 +199,15 @@ const MessageBlock: React.FC<MessageProps> = ({
           <Avatar>
             <Img src={avatar} />
           </Avatar>
-          <FriendMessContentText style={{ ...borderRadius }}>
-            {mess.message}
+
+          <FriendMessContentText
+            style={{
+              ...borderRadius,
+              backgroundColor: mess.type === "image" ? "unset" : "",
+              padding: mess.type === "image" ? "8px 0 0" : "",
+            }}
+          >
+            {renderMessType(mess)}
           </FriendMessContentText>
         </FriendMess>
       ))}

@@ -6,3 +6,4 @@ export const GET_SEARCH = "/user/search?key=KEY_WORD";
 export const GET_HISTORY_CHAT = "/chat";
 export const GET_ROOM = "/chat/room?friendID=FRIEND_ID";
 export const GET_HISTORY_MESS = "/chat/ID?page=PAGE_NUMBER";
+export const POST_UPLOAD_FILE = "/chat/upload";

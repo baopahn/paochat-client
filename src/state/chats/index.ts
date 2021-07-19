@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getHistoryChat, getHistoryMessage } from "api/feature";
 import socket from "socket";
-import { Chat } from "state/types";
+import { Chat, Message } from "state/types";
 import generateIDLocal from "utils/generateIDLocal";
 
 const sortCB = (c1, c2) => {
@@ -164,13 +164,9 @@ export const fetchHistoryMess = (id) => async (dispatch, getState) => {
 
 export const fetchMoreHistoryMess = () => async (dispatch, getState) => {
   const { chat } = getState();
-  console.log(chat.page);
 
   if (!chat.current) return;
-  const { listMess, friend } = await getHistoryMessage(
-    chat.current,
-    chat.page + 1
-  );
+  const { listMess } = await getHistoryMessage(chat.current, chat.page + 1);
 
   if (listMess.length > 0) {
     dispatch(appendListMess(listMess));
@@ -192,7 +188,7 @@ export const setLastMessageAsync = (mess) => async (dispatch, getState) => {
   }
 };
 
-export const sendMess = (message) => async (dispatch, getState) => {
+export const sendMess = (message: Message) => async (dispatch, getState) => {
   const { chat } = getState();
   const { friend, current } = chat;
   if (!friend) return;
@@ -201,7 +197,7 @@ export const sendMess = (message) => async (dispatch, getState) => {
   const newMessage = {
     room: current,
     isSender: true,
-    message: { message, type: "text", read: false, sending: true, idLocal },
+    message: { ...message, read: false, sending: true, idLocal },
     createdAt: new Date().toString(),
   };
 

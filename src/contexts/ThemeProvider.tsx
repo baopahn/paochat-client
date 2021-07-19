@@ -5,7 +5,10 @@ import light from "theme/light";
 
 const CACHE_KEY = "IS_DARK";
 
-const ThemeContext = React.createContext({
+const ThemeContext = React.createContext<{
+  isDark: boolean;
+  toggleTheme: () => void;
+}>({
   isDark: false,
   toggleTheme: (): void => {},
 });

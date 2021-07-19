@@ -5,4 +5,4 @@ export interface UserInfo {
   avatar: string;
 }
 
-export type Hander = () => void;
+export type Handler = () => void;

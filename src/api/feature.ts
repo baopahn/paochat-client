@@ -1,4 +1,7 @@
 import axiosClient from "api";
+import axios from "axios";
+import { BASE_URL_API } from "config";
+import { TOKEN_CACHE_KEY } from "contexts/AuthProvider";
 import {
   GET_INFO,
   GET_ROOM,
@@ -7,6 +10,7 @@ import {
   GET_SEARCH,
   POST_SIGN_IN,
   POST_SIGN_OUT,
+  POST_UPLOAD_FILE,
 } from "./url";
 
 const utilTry = async (execute, tag) => {
@@ -93,4 +97,27 @@ export const getChatRoom = async (friendID) => {
   const response = await utilTry(axiosClient.get(url), "GET_CHAT_ROOM");
   const { roomChat } = getData(response);
   return roomChat;
+};
+
+export const uploadFile = async (file: File): Promise<string | null> => {
+  const form = new FormData();
+  form.append("file", file);
+
+  const response = await utilTry(
+    axios({
+      baseURL: BASE_URL_API,
+      method: "post",
+      url: POST_UPLOAD_FILE,
+      data: form,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${localStorage.getItem(TOKEN_CACHE_KEY)}`,
+      },
+    }),
+    "POST_UPLOAD_FILE"
+  );
+
+  if (!response) return null;
+  const { webContentLink } = getData(response.data);
+  return webContentLink;
 };

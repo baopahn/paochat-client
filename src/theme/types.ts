@@ -11,6 +11,7 @@ export interface ThemeType {
   zIndexModal: number;
   overlay: string;
   menu: string;
+  modal: string;
 }
 
 export default ThemeType;

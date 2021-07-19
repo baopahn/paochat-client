@@ -20,7 +20,9 @@ const PageLoader = () => {
   return (
     <PageLoaderWrap>
       <Logo width={60} height={60} />
-      <Text style={{ marginLeft: 20, fontSize: 24 }}>PaoChat</Text>
+      <Text style={{ marginLeft: 20, fontSize: 28, fontWeight: 700 }}>
+        PaoChat
+      </Text>
     </PageLoaderWrap>
   );
 };
