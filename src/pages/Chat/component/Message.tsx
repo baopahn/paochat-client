@@ -3,6 +3,7 @@ import React from "react";
 import { BiUpArrowAlt } from "react-icons/bi";
 import { Message as MessageType } from "state/types";
 import styled from "styled-components";
+import { getLinkViewImage } from "utils/getLink";
 
 const Block = styled.div`
   display: flex;
@@ -171,7 +172,16 @@ const MessageBlock: React.FC<MessageProps> = ({
 
   const renderMessType = (message) => {
     if (message.type === "text") return message.message;
-    if (message.type === "image") return <ImgCustom src={message.message} />;
+    if (message.type === "image")
+      return (
+        <a
+          href={getLinkViewImage(message.message)}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <ImgCustom src={message.message} />
+        </a>
+      );
   };
 
   const renderMess = isSender ? (
