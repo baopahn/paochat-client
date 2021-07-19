@@ -1,3 +1,7 @@
 export const checkUrl = (message: string): boolean => {
-  return message.includes("http://") || message.includes("https://");
+  if (!message) return false;
+  return (
+    message.toString().includes("http://") ||
+    message.toString().includes("https://")
+  );
 };
