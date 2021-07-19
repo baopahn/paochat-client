@@ -12,7 +12,7 @@ export const dark: ThemeType = {
   icon: "rgba(255,255,255,0.5)",
   card: "#fff",
   zIndexModal: 10,
-  overlay: "rgba(0,0,0,0.1)",
+  overlay: "rgba(0,0,0,0.3)",
   menu: "hsl(210,35%,12%)",
   modal: "hsl(210,35%,15%)",
 };
