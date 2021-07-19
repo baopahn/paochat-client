@@ -3,12 +3,14 @@ import GlobalStyle from "components/Global";
 import PageLoader from "components/PageLoader";
 import ResetCSS from "components/ResetCSS";
 import { AuthContext } from "contexts/AuthProvider";
+
 import PrivateRoute from "pages/PrivateRoute";
 import React, { lazy, Suspense, useContext } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 const Home = lazy(() => import("pages/Home"));
 const SignIn = lazy(() => import("pages/SignIn"));
+const Call = lazy(() => import("pages/Call"));
 
 const App: React.FC = () => {
   const { userInfo } = useContext(AuthContext);
@@ -22,6 +24,11 @@ const App: React.FC = () => {
           <Route path="/sign-in">
             <SignIn />
           </Route>
+
+          <PrivateRoute exact path="/call/:id">
+            <Call />
+          </PrivateRoute>
+
           <PrivateRoute path="/">
             {userInfo ? (
               <ControlPanel>
