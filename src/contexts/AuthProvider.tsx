@@ -1,5 +1,6 @@
 import { getInfo, signIn, signOut } from "api/feature";
 import React, { useEffect, useState } from "react";
+import { useContext } from "react";
 import socket from "socket";
 import { UserInfo } from "./types";
 
@@ -71,4 +72,8 @@ const AuthContextProvider: React.FC = ({ children }) => {
   );
 };
 
-export { AuthContext, AuthContextProvider };
+const useAuth = () => {
+  return useContext(AuthContext);
+};
+
+export { AuthContext, AuthContextProvider, useAuth };

@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import useChat from "state/hooks/useChat";
 import styled from "styled-components";
+import { FiVideo } from "react-icons/fi";
 
 const HeadWrap = styled.div`
   height: 50px;
@@ -33,17 +34,24 @@ const Name = styled(Text)`
   font-weight: 600;
 `;
 
-const Control = styled.div``;
-
-const ButtonInfo = styled(Button)`
+const CustomButton = styled(Button)`
   background-color: ${({ theme }) => theme.primary};
-  width: 22px;
-  height: 22px;
+  width: 30px;
+  height: 30px;
   color: #fff;
   font-weight: 600;
   border-radius: 50%;
+  margin: 0 5px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
+const Control = styled.div`
+  display: flex;
+  align-items: center;
+`;
 const Head = () => {
   const { friend } = useChat();
 
@@ -58,8 +66,11 @@ const Head = () => {
         </Info>
 
         <Control>
+          <CustomButton>
+            <FiVideo />
+          </CustomButton>
           <Link to={`/profile/${friend._id}`}>
-            <ButtonInfo>i</ButtonInfo>
+            <CustomButton>i</CustomButton>
           </Link>
         </Control>
       </>

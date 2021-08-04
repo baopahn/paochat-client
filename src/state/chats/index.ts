@@ -82,7 +82,11 @@ export const chatSlice = createSlice({
         ({ idLocal }) => idLocal === mess.idLocal
       );
 
-      message.sending = false;
+      if (message) {
+        message.sending = false;
+      } else {
+        block.message.unshift({ ...mess.message });
+      }
     },
 
     setHistoryChat: (state, action) => {

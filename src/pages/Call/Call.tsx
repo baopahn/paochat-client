@@ -1,12 +1,11 @@
-import React from "react";
-import { useEffect } from "react";
-import { useRef } from "react";
-import styled from "styled-components";
+import { useAuth } from "contexts/AuthProvider";
+import { useQuery } from "hooks/useQuery";
+import React, { useEffect, useRef, useState } from "react";
+import { HiPhoneMissedCall } from "react-icons/hi";
 import UseAnimations from "react-useanimations";
 import microphone2 from "react-useanimations/lib/microphone2";
 import video2 from "react-useanimations/lib/video2";
-import { HiPhoneMissedCall } from "react-icons/hi";
-import Button from "components/Button/Button";
+import styled from "styled-components";
 
 const CallWrap = styled.div`
   background-color: ${({ theme }) => theme.background};
@@ -76,14 +75,13 @@ const MyVideo = styled.video`
 
 const MainVideoWrap = styled.div`
   width: 80%;
-  height: 98vh;
+  height: 100vh;
   position: relative;
   overflow: hidden;
   &:hover > ${CallAction} {
     opacity: 1;
   }
   text-align: center;
-  border-radius: 8px;
 `;
 
 const FriendVideo = styled.video`
@@ -94,14 +92,16 @@ const FriendVideo = styled.video`
   transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg); /* Safari and Chrome */
   -moz-transform: rotateY(180deg); /* Firefox */
-  border-radius: 8px;
   background-color: #000;
 `;
 
 const Call = () => {
+  const query = useQuery();
   const myVideoRef = useRef(null);
   const friendVideoRef = useRef(null);
   const connection = useRef(null);
+  const [stream, setStream] = useState(null);
+  const { userInfo } = useAuth();
 
   const streamVideo = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({
@@ -109,7 +109,7 @@ const Call = () => {
       audio: true,
     });
 
-    friendVideoRef.current.srcObject = stream;
+    setStream(stream);
     myVideoRef.current.srcObject = stream;
   };
 

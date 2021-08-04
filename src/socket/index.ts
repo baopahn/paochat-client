@@ -74,6 +74,8 @@ const SocketClient = class {
   readAllMess(room, receiver) {
     this.socket.emit(SEND_READ_ALL_MESS, { room, receiver });
   }
+
+  call(room, signal, receiver) {}
 };
 
 const socket = new SocketClient();
