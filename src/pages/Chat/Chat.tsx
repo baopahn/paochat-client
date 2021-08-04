@@ -66,6 +66,7 @@ const Chat = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!mess) return;
     setMess("");
     dispatch(sendMess({ message: mess, type: "text" }));
   };

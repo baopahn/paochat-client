@@ -2,10 +2,9 @@ import ControlPanel from "components/ControlPanel/ControlPanel";
 import GlobalStyle from "components/Global";
 import PageLoader from "components/PageLoader";
 import ResetCSS from "components/ResetCSS";
-import { AuthContext } from "contexts/AuthProvider";
-
+import { useAuth } from "contexts/AuthProvider";
 import PrivateRoute from "pages/PrivateRoute";
-import React, { lazy, Suspense, useContext } from "react";
+import React, { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 const Home = lazy(() => import("pages/Home"));
@@ -13,7 +12,7 @@ const SignIn = lazy(() => import("pages/SignIn"));
 const Call = lazy(() => import("pages/Call"));
 
 const App: React.FC = () => {
-  const { userInfo } = useContext(AuthContext);
+  const { userInfo } = useAuth();
 
   return (
     <Router>

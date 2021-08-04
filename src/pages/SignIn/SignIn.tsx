@@ -1,7 +1,7 @@
 import { Text } from "components/Layout/ElementCustom";
 import Logo from "components/Logo";
-import { AuthContext } from "contexts/AuthProvider";
-import React, { useContext } from "react";
+import { useAuth } from "contexts/AuthProvider";
+import React from "react";
 import { Redirect, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import GoogleLoginCustom from "./GoogleLogin";
@@ -37,7 +37,7 @@ const LogoWrap = styled.div`
 `;
 
 const SignIn = () => {
-  const { login, token } = useContext(AuthContext);
+  const { login, token } = useAuth();
   const history = useHistory();
 
   const handleSuccess = async ({ tokenId }) => {

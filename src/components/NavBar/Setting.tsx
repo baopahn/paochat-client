@@ -1,10 +1,9 @@
 import { Text } from "components/Layout/ElementCustom";
 import Menu from "components/Menu/Menu";
 import MenuItem from "components/Menu/MenuItem";
-import { AuthContext } from "contexts/AuthProvider";
+import { useAuth } from "contexts/AuthProvider";
 import { ThemeContext } from "contexts/ThemeProvider";
-import React, { useContext } from "react";
-import { useState } from "react";
+import React, { useContext, useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import styled from "styled-components";
 import soundController from "utils/sound";
@@ -40,7 +39,7 @@ const ProfileName = styled(Text)`
 `;
 
 const Setting = () => {
-  const { userInfo, logout } = useContext(AuthContext);
+  const { userInfo, logout } = useAuth();
 
   const styleIcon = {
     backgroundColor: "unset",
