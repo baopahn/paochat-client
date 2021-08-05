@@ -1,6 +1,6 @@
 # PaoChat
 
-### A website that allows you can quickly login with your google account, chat, send picuture to each other.
+### A website that allows you can quickly login with your google account, chat, send picture to each other.
 
 ### Link: [https://paochat.online](https://paochat.online)
 
