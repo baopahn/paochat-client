@@ -12,7 +12,7 @@
 **2. Home - Light mode**
 ![](./StoryPicture/2.png)
 
-**3. Home - DarkMode**
+**3. Home - Dark mode**
 ![](./StoryPicture/4.png)
 
 **4. Search friend**
